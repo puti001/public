@@ -1,0 +1,12 @@
+{
+  "files": [
+    {
+      "name": "範例1",
+      "path": "texts/example1.txt"
+    },
+    {
+      "name": "範例2", 
+      "path": "texts/example2.txt"
+    }
+  ]
+} 
