@@ -260,8 +260,19 @@
     </footer>
 
     <script>
-        // Init PDF.js Worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        // Init PDF.js Worker (使用 Blob URL 避免跨域問題，確保在 GitHub Pages 等環境正常運作)
+        const pdfWorkerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        fetch(pdfWorkerSrc)
+            .then(response => response.text())
+            .then(code => {
+                const blob = new Blob([code], { type: 'application/javascript' });
+                pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(blob);
+            })
+            .catch(err => {
+                console.error("無法載入 PDF.js Worker，請確認網路連線。", err);
+                // 如果失敗，退回到原本的方法試試看
+                pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
+            });
 
         // --- State Management ---
         const state = {
